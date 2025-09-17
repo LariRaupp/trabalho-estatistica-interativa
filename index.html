@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Estatística Interativa — Trabalho</title>
+
+    <!-- Chart.js para os gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./style.css" />
+
+    <!-- Fonte monoespaçada do Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <!-- ASCII banner com efeito digitando -->
+        <div class="ascii-box" aria-label="Banner ASCII">
+          <script type="text/plain" id="asciiText">
+            ██████╗░░█████╗░████████╗░█████╗░░█████╗░███████╗░██████╗██╗░░░██╗░█████╗░░█████╗░
+            ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██╔════╝██║░░░██║██╔══██╗██╔══██╗
+            ██║░░██║███████║░░░██║░░░███████║██║░░╚═╝█████╗░░╚█████╗░██║░░░██║██║░░╚═╝███████║
+            ██║░░██║██╔══██║░░░██║░░░██╔══██║██║░░██╗██╔══╝░░░╚═══██╗██║░░░██║██║░░██╗██╔══██║
+            ██████╔╝██║░░██║░░░██║░░░██║░░██║╚█████╔╝███████╗██████╔╝╚██████╔╝╚█████╔╝██║░░██║
+            ╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░╚══════╝╚═════╝░░╚═════╝░░╚════╝░╚═╝░░╚═╝
+          </script>
+        </div>
+
+        <h1>Estatística Interativa</h1>
+        <p class="sub">
+          Cole os dados separados por vírgula ou espaço. Ex.:
+          <code>7, 8, 5, 9, 10, 10, 6</code>
+        </p>
+
+        <div class="row">
+          <div>
+            <label for="entrada" class="muted small">Dados</label>
+            <textarea
+              id="entrada"
+              placeholder="Ex.: 7, 8, 5, 9, 10, 10, 6"
+            ></textarea>
+
+            <div class="btns">
+              <button id="btnCalcular" class="primary">
+                Calcular estatísticas
+              </button>
+              <button id="btnExemplo" class="ghost">
+                Preencher com exemplo
+              </button>
+              <button id="btnLimpar" class="ghost">Limpar</button>
+            </div>
+
+            <div
+              id="ordenadoBox"
+              class="sorted-box"
+              style="display: none; margin-top: 12px"
+            >
+              <label class="muted small">Dados ordenados (crescente)</label>
+              <textarea id="ordenado" readonly></textarea>
+            </div>
+
+            <div id="msg" class="small" style="margin-top: 8px"></div>
+
+            <table id="tabela" style="display: none">
+              <thead>
+                <tr>
+                  <th>Métrica</th>
+                  <th>Populacional</th>
+                  <th>Amostral</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Média</td>
+                  <td id="mediaP">—</td>
+                  <td class="muted">—</td>
+                </tr>
+                <tr>
+                  <td>Mediana</td>
+                  <td id="medianaP">—</td>
+                  <td class="muted">—</td>
+                </tr>
+                <tr>
+                  <td>Moda</td>
+                  <td id="modaP">—</td>
+                  <td class="muted">—</td>
+                </tr>
+                <tr>
+                  <td>Variância</td>
+                  <td id="varP">—</td>
+                  <td id="varA">—</td>
+                </tr>
+                <tr>
+                  <td>Desvio padrão</td>
+                  <td id="dpP">—</td>
+                  <td id="dpA">—</td>
+                </tr>
+                <tr>
+                  <td>Coeficiente de variação</td>
+                  <td id="cvP">—</td>
+                  <td id="cvA">—</td>
+                </tr>
+                <tr>
+                  <td>Amplitude</td>
+                  <td id="ampP">—</td>
+                  <td class="muted">—</td>
+                </tr>
+                <tr>
+                  <td>n</td>
+                  <td id="nP">—</td>
+                  <td class="muted">—</td>
+                </tr>
+                <tr>
+                  <td>Mín / Máx</td>
+                  <td id="minmaxP">—</td>
+                  <td class="muted">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <div class="badge">Gráficos</div>
+            <p class="muted small" style="margin: 8px 0 12px">
+              Gere quantos quiser; depois clique em <b>Baixar PNG</b>.
+            </p>
+            <div class="btns">
+              <button id="gHist">Histograma</button>
+              <button id="gBarras">Barras</button>
+              <button id="gDisp">Dispersão</button>
+              <button id="gPizza">Pizza</button>
+            </div>
+            <!-- AVISO DO STURGES FOI REMOVIDO DAQUI -->
+          </div>
+        </div>
+
+        <div class="grid" style="margin-top: 22px">
+          <div class="canvas-card">
+            <div class="canvas-head">
+              <b>Histograma</b
+              ><button data-dl="hist" class="ghost small">Baixar PNG</button>
+            </div>
+            <canvas id="histCanvas" height="280"></canvas>
+          </div>
+          <div class="canvas-card">
+            <div class="canvas-head">
+              <b>Barras (Frequência)</b
+              ><button data-dl="barras" class="ghost small">Baixar PNG</button>
+            </div>
+            <canvas id="barrasCanvas" height="280"></canvas>
+          </div>
+          <div class="canvas-card">
+            <div class="canvas-head">
+              <b>Dispersão</b
+              ><button data-dl="disp" class="ghost small">Baixar PNG</button>
+            </div>
+            <canvas id="dispCanvas" height="280"></canvas>
+          </div>
+          <div class="canvas-card">
+            <div class="canvas-head">
+              <b>Pizza</b
+              ><button data-dl="pizza" class="ghost small">Baixar PNG</button>
+            </div>
+            <canvas id="pizzaCanvas" height="280"></canvas>
+          </div>
+        </div>
+
+        <p class="foot">
+          Obs.: se a média for 0, o CV não é definido (evita divisão por
+          zero).<br />
+          Obs.: no histograma, a quantidade de barras (bins) é calculada pela
+          regra de Sturges: ⌈1 + 3,322·log10(n)⌉.
+        </p>
+      </div>
+    </div>
+
+    <!-- JS -->
+    <script src="./app.js"></script>
+    <!-- Script do efeito de digitação do ASCII -->
+    <script defer src="./ascii.js"></script>
+  </body>
+</html>
