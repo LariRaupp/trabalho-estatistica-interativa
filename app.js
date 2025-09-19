@@ -276,8 +276,19 @@ function ativarAba(nome) {
     aBtn.classList.remove("primary");
   }
 }
-$("#tabBrutosBtn").addEventListener("click", () => ativarAba("brutos"));
-$("#tabAgrupadosBtn").addEventListener("click", () => ativarAba("agrupados"));
+// Abas (troca via botões)
+const tabs = document.getElementById("tabs");
+if (tabs) {
+  tabs.querySelectorAll("button[data-tab]").forEach((b) => (b.type = "button"));
+
+  tabs.addEventListener("click", (ev) => {
+    const btn = ev.target.closest("button[data-tab]");
+    if (!btn) return;
+    ativarAba(btn.dataset.tab); // "brutos" ou "agrupados"
+  });
+}
+
+// Aba padrão
 ativarAba("brutos");
 
 // botões dos brutos
