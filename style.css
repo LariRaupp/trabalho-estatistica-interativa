@@ -188,7 +188,7 @@ button:disabled {
 }
 
 /* =========================
-   Tabela de resultados
+   Tabela (resultados e classes)
    ========================= */
 table {
   width: 100%;
@@ -199,17 +199,42 @@ table {
   font-size: var(--fs-100);
 }
 
+/* scroll horizontal em telas estreitas */
+#tabela,
+#classesTable,
+#distTable {
+  display: block;
+  overflow-x: auto;
+}
+
 th,
 td {
   border-bottom: 0.0625rem solid #273149;
   padding: 0.625rem 0.75rem;
   text-align: left;
+  vertical-align: middle;
 }
 
 th {
   color: var(--muted);
   font-weight: 600;
   background: #0f1420;
+}
+
+/* Inputs na tabela de classes (agrupados) */
+#classesTable input[type="number"] {
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border: 0.0625rem solid #273149;
+  border-radius: var(--radius-md);
+  background: #0c0f17;
+  color: var(--text);
+  font-size: var(--fs-100);
+  outline: none;
+}
+
+#classesTable input[type="number"]::placeholder {
+  color: #7d8bb1;
 }
 
 /* =========================

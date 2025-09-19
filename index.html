@@ -38,139 +38,259 @@
           <code>7, 8, 5, 9, 10, 10, 6</code>
         </p>
 
-        <div class="row">
-          <div>
-            <label for="entrada" class="muted small">Dados</label>
-            <textarea
-              id="entrada"
-              placeholder="Ex.: 7, 8, 5, 9, 10, 10, 6"
-            ></textarea>
+        <!-- Abas -->
+        <div class="btns" id="tabs">
+          <button class="ghost" data-tab="brutos" id="tabBrutosBtn">
+            Dados brutos
+          </button>
+          <button class="ghost" data-tab="agrupados" id="tabAgrupadosBtn">
+            Dados agrupados
+          </button>
+        </div>
 
-            <div class="btns">
-              <button id="btnCalcular" class="primary">
-                Calcular estatísticas
-              </button>
-              <button id="btnExemplo" class="ghost">
-                Preencher com exemplo
-              </button>
-              <button id="btnLimpar" class="ghost">Limpar</button>
+        <!-- ========== DADOS BRUTOS ========== -->
+        <div id="tabBrutos" aria-labelledby="tabBrutosBtn">
+          <div class="row">
+            <div>
+              <label for="entrada" class="muted small">Dados</label>
+              <textarea
+                id="entrada"
+                placeholder="Ex.: 7, 8, 5, 9, 10, 10, 6"
+              ></textarea>
+
+              <div class="btns">
+                <button id="btnCalcular" class="primary">
+                  Calcular estatísticas
+                </button>
+                <button id="btnExemplo" class="ghost">
+                  Preencher com exemplo
+                </button>
+                <button id="btnLimpar" class="ghost">Limpar</button>
+              </div>
+
+              <div
+                id="ordenadoBox"
+                class="sorted-box"
+                style="display: none; margin-top: 12px"
+              >
+                <label class="muted small">Dados ordenados (crescente)</label>
+                <textarea id="ordenado" readonly></textarea>
+              </div>
+
+              <div id="msg" class="small" style="margin-top: 8px"></div>
+
+              <!-- Resultados (brutos) -->
+              <table id="tabela" style="display: none">
+                <thead>
+                  <tr>
+                    <th>Métrica</th>
+                    <th>Populacional</th>
+                    <th>Amostral</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Média</td>
+                    <td id="mediaP">—</td>
+                    <td class="muted">—</td>
+                  </tr>
+                  <tr>
+                    <td>Mediana</td>
+                    <td id="medianaP">—</td>
+                    <td class="muted">—</td>
+                  </tr>
+                  <tr>
+                    <td>Moda</td>
+                    <td id="modaP">—</td>
+                    <td class="muted">—</td>
+                  </tr>
+                  <tr>
+                    <td>Variância</td>
+                    <td id="varP">—</td>
+                    <td id="varA">—</td>
+                  </tr>
+                  <tr>
+                    <td>Desvio padrão</td>
+                    <td id="dpP">—</td>
+                    <td id="dpA">—</td>
+                  </tr>
+                  <tr>
+                    <td>Coeficiente de variação</td>
+                    <td id="cvP">—</td>
+                    <td id="cvA">—</td>
+                  </tr>
+                  <tr>
+                    <td>Amplitude</td>
+                    <td id="ampP">—</td>
+                    <td class="muted">—</td>
+                  </tr>
+                  <tr>
+                    <td>n</td>
+                    <td id="nP">—</td>
+                    <td class="muted">—</td>
+                  </tr>
+                  <tr>
+                    <td>Mín / Máx</td>
+                    <td id="minmaxP">—</td>
+                    <td class="muted">—</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <div
-              id="ordenadoBox"
-              class="sorted-box"
-              style="display: none; margin-top: 12px"
-            >
-              <label class="muted small">Dados ordenados (crescente)</label>
-              <textarea id="ordenado" readonly></textarea>
+            <div>
+              <div class="badge">Gráficos</div>
+              <p class="muted small" style="margin: 8px 0 12px">
+                Gere quantos quiser; depois clique em <b>Baixar PNG</b>.
+              </p>
+              <div class="btns">
+                <button id="gHist">Histograma</button>
+                <button id="gBarras">Barras</button>
+                <button id="gDisp">Dispersão</button>
+                <button id="gPizza">Pizza</button>
+              </div>
             </div>
-
-            <div id="msg" class="small" style="margin-top: 8px"></div>
-
-            <table id="tabela" style="display: none">
-              <thead>
-                <tr>
-                  <th>Métrica</th>
-                  <th>Populacional</th>
-                  <th>Amostral</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Média</td>
-                  <td id="mediaP">—</td>
-                  <td class="muted">—</td>
-                </tr>
-                <tr>
-                  <td>Mediana</td>
-                  <td id="medianaP">—</td>
-                  <td class="muted">—</td>
-                </tr>
-                <tr>
-                  <td>Moda</td>
-                  <td id="modaP">—</td>
-                  <td class="muted">—</td>
-                </tr>
-                <tr>
-                  <td>Variância</td>
-                  <td id="varP">—</td>
-                  <td id="varA">—</td>
-                </tr>
-                <tr>
-                  <td>Desvio padrão</td>
-                  <td id="dpP">—</td>
-                  <td id="dpA">—</td>
-                </tr>
-                <tr>
-                  <td>Coeficiente de variação</td>
-                  <td id="cvP">—</td>
-                  <td id="cvA">—</td>
-                </tr>
-                <tr>
-                  <td>Amplitude</td>
-                  <td id="ampP">—</td>
-                  <td class="muted">—</td>
-                </tr>
-                <tr>
-                  <td>n</td>
-                  <td id="nP">—</td>
-                  <td class="muted">—</td>
-                </tr>
-                <tr>
-                  <td>Mín / Máx</td>
-                  <td id="minmaxP">—</td>
-                  <td class="muted">—</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
 
-          <div>
-            <div class="badge">Gráficos</div>
-            <p class="muted small" style="margin: 8px 0 12px">
-              Gere quantos quiser; depois clique em <b>Baixar PNG</b>.
-            </p>
-            <div class="btns">
-              <button id="gHist">Histograma</button>
-              <button id="gBarras">Barras</button>
-              <button id="gDisp">Dispersão</button>
-              <button id="gPizza">Pizza</button>
+          <!-- Gráficos (brutos) -->
+          <div class="grid" style="margin-top: 22px">
+            <div class="canvas-card">
+              <div class="canvas-head">
+                <b>Histograma</b
+                ><button data-dl="hist" class="ghost small">Baixar PNG</button>
+              </div>
+              <canvas id="histCanvas" height="280"></canvas>
             </div>
-            <!-- AVISO DO STURGES FOI REMOVIDO DAQUI -->
+            <div class="canvas-card">
+              <div class="canvas-head">
+                <b>Barras (Frequência)</b
+                ><button data-dl="barras" class="ghost small">
+                  Baixar PNG
+                </button>
+              </div>
+              <canvas id="barrasCanvas" height="280"></canvas>
+            </div>
+            <div class="canvas-card">
+              <div class="canvas-head">
+                <b>Dispersão</b
+                ><button data-dl="disp" class="ghost small">Baixar PNG</button>
+              </div>
+              <canvas id="dispCanvas" height="280"></canvas>
+            </div>
+            <div class="canvas-card">
+              <div class="canvas-head">
+                <b>Pizza</b
+                ><button data-dl="pizza" class="ghost small">Baixar PNG</button>
+              </div>
+              <canvas id="pizzaCanvas" height="280"></canvas>
+            </div>
           </div>
         </div>
 
-        <div class="grid" style="margin-top: 22px">
-          <div class="canvas-card">
-            <div class="canvas-head">
-              <b>Histograma</b
-              ><button data-dl="hist" class="ghost small">Baixar PNG</button>
+        <!-- ========== DADOS AGRUPADOS ========== -->
+        <div
+          id="tabAgrupados"
+          aria-labelledby="tabAgrupadosBtn"
+          style="display: none"
+        >
+          <div class="row">
+            <div>
+              <div class="badge">Estruturar classes</div>
+              <p class="muted small" style="margin: 8px 0 12px">
+                Informe os intervalos (limite inferior e superior) e a
+                frequência de cada classe.
+              </p>
+
+              <table id="classesTable">
+                <thead>
+                  <tr>
+                    <th>Classe</th>
+                    <th>Limite inferior (Li)</th>
+                    <th>Limite superior (Ls)</th>
+                    <th>Frequência (fi)</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="classesBody"></tbody>
+              </table>
+
+              <div class="btns">
+                <button id="addClasse" class="ghost">+ Adicionar classe</button>
+                <button id="btnCalcAgr" class="primary">
+                  Calcular (agrupado)
+                </button>
+                <button id="btnExemploAgr" class="ghost">
+                  Preencher com exemplo
+                </button>
+                <button id="btnLimparAgr" class="ghost">Limpar</button>
+              </div>
+
+              <!-- Tabela de frequência dos agrupados -->
+              <table id="distTable" style="display: none; margin-top: 12px">
+                <thead>
+                  <tr>
+                    <th>xi (ponto médio)</th>
+                    <th>Classe</th>
+                    <th>fi</th>
+                    <th>fi / N</th>
+                    <th>Fi (acum.)</th>
+                  </tr>
+                </thead>
+                <tbody id="distBody"></tbody>
+              </table>
+
+              <!-- Resumo (agrupados) -->
+              <div
+                id="agrResumo"
+                class="canvas-card"
+                style="display: none; margin-top: 12px"
+              ></div>
             </div>
-            <canvas id="histCanvas" height="280"></canvas>
+
+            <div>
+              <div class="badge">Gráficos (agrupados)</div>
+              <p class="muted small" style="margin: 8px 0 12px">
+                Após calcular, você poderá gerar histograma/polígono/ogiva.
+              </p>
+              <div class="btns">
+                <button id="gHistAgr">Histograma (classes)</button>
+                <button id="gPoligono">Polígono de frequências</button>
+                <button id="gOgiva">Ogiva (acumulada)</button>
+              </div>
+            </div>
           </div>
-          <div class="canvas-card">
-            <div class="canvas-head">
-              <b>Barras (Frequência)</b
-              ><button data-dl="barras" class="ghost small">Baixar PNG</button>
+
+          <!-- Gráficos (agrupados) -->
+          <div class="grid" style="margin-top: 22px">
+            <div class="canvas-card">
+              <div class="canvas-head">
+                <b>Histograma (classes)</b
+                ><button data-dl="histAgr" class="ghost small">
+                  Baixar PNG
+                </button>
+              </div>
+              <canvas id="histAgrCanvas" height="280"></canvas>
             </div>
-            <canvas id="barrasCanvas" height="280"></canvas>
-          </div>
-          <div class="canvas-card">
-            <div class="canvas-head">
-              <b>Dispersão</b
-              ><button data-dl="disp" class="ghost small">Baixar PNG</button>
+            <div class="canvas-card">
+              <div class="canvas-head">
+                <b>Polígono de frequências</b
+                ><button data-dl="poligono" class="ghost small">
+                  Baixar PNG
+                </button>
+              </div>
+              <canvas id="poligonoCanvas" height="280"></canvas>
             </div>
-            <canvas id="dispCanvas" height="280"></canvas>
-          </div>
-          <div class="canvas-card">
-            <div class="canvas-head">
-              <b>Pizza</b
-              ><button data-dl="pizza" class="ghost small">Baixar PNG</button>
+            <div class="canvas-card">
+              <div class="canvas-head">
+                <b>Ogiva (acumulada)</b
+                ><button data-dl="ogiva" class="ghost small">Baixar PNG</button>
+              </div>
+              <canvas id="ogivaCanvas" height="280"></canvas>
             </div>
-            <canvas id="pizzaCanvas" height="280"></canvas>
           </div>
         </div>
 
+        <!-- Rodapé -->
         <p class="foot">
           Obs.: se a média for 0, o CV não é definido (evita divisão por
           zero).<br />
