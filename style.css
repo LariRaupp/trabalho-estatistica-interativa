@@ -11,7 +11,6 @@
   --warn: #ffb86b;
   --bad: #ff6b6b;
 
-  /* escala / layout */
   --radius-lg: 1rem;
   --radius-md: 0.75rem;
   --space-1: 0.5rem;
@@ -23,27 +22,21 @@
   --space-8: 2rem;
   --space-10: 2.5rem;
 
-  /* sombras */
   --shadow-1: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.25);
 
-  /* tipografia */
   --fs-100: clamp(0.875rem, 0.83rem + 0.2vw, 0.95rem);
   --fs-200: clamp(1rem, 0.96rem + 0.3vw, 1.1rem);
   --fs-300: clamp(1.125rem, 1.05rem + 0.5vw, 1.3rem);
   --fs-title: clamp(1.3rem, 1.15rem + 1.2vw, 1.8rem);
 }
 
-/* =========================
-   Reset
-   ========================= */
+/* Reset */
 * {
   box-sizing: border-box;
 }
-
 html {
   scroll-behavior: smooth;
 }
-
 body {
   margin: 0;
   font-family: Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
@@ -53,34 +46,28 @@ body {
   font-size: var(--fs-200);
 }
 
-/* =========================
-   Layout
-   ========================= */
+/* Layout */
 .wrap {
   max-width: min(70rem, 92vw);
   margin: var(--space-10) auto;
   padding: 0 var(--space-4);
 }
-
 .card {
   background: var(--card);
-  border: 0.0625rem solid #1d2330;
+  border: 1px solid #1d2330;
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   box-shadow: var(--shadow-1);
 }
-
 h1 {
   font-size: var(--fs-title);
   margin: 0 0 var(--space-2);
 }
-
 p.sub {
   color: var(--muted);
   margin: 0 0 var(--space-4);
   font-size: var(--fs-100);
 }
-
 .small {
   font-size: var(--fs-100);
 }
@@ -88,18 +75,15 @@ p.sub {
   color: var(--muted);
 }
 
-/* =========================
-   ASCII banner
-   ========================= */
+/* ASCII */
 .ascii-box {
   background: #0c0f17;
-  border: 0.0625rem solid #273149;
+  border: 1px solid #273149;
   border-radius: var(--radius-md);
   padding: var(--space-4);
   margin-bottom: var(--space-5);
   overflow-x: auto;
 }
-
 .ascii-box pre {
   margin: 0;
   font-family: "Noto Sans Mono", "DejaVu Sans Mono", "Cousine",
@@ -108,26 +92,19 @@ p.sub {
   font-weight: 600;
   font-size: clamp(0.62rem, 0.52rem + 0.5vw, 0.86rem);
   line-height: 1;
-  letter-spacing: 0;
-  white-space: pre;
   color: var(--accent);
   text-align: center;
-  font-variant-ligatures: none;
-  font-kerning: none;
-  font-synthesis: none;
-  text-rendering: optimizeSpeed;
+  white-space: pre;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* =========================
-   Entrada (textarea)
-   ========================= */
+/* Entrada */
 textarea {
   width: 100%;
   min-height: 7.5rem;
   border-radius: var(--radius-md);
-  border: 0.0625rem solid #273149;
+  border: 1px solid #273149;
   background: #0c0f17;
   color: var(--text);
   padding: var(--space-4);
@@ -136,16 +113,12 @@ textarea {
   font-size: var(--fs-100);
 }
 
-/* =========================
-   Dados ordenados
-   ========================= */
+/* Dados ordenados */
 .sorted-box {
   margin-top: var(--space-2);
 }
 
-/* =========================
-   Grid de conteúdo
-   ========================= */
+/* Grid conteúdo */
 .row {
   display: grid;
   grid-template-columns: 1fr;
@@ -153,18 +126,19 @@ textarea {
   margin-top: var(--space-2);
 }
 
-/* =========================
-   Botões
-   ========================= */
+.row > * {
+  min-width: 0;
+}
+
+/* Botões */
 .btns {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-1);
   margin-top: var(--space-2);
 }
-
 button {
-  border: 0.0625rem solid #28344a;
+  border: 1px solid #28344a;
   background: #101522;
   color: var(--text);
   padding: 0.625rem 0.875rem;
@@ -172,24 +146,19 @@ button {
   cursor: pointer;
   font-size: var(--fs-100);
 }
-
 button.primary {
   background: linear-gradient(180deg, #1a57ff, #1746c9);
   border-color: #143ba7;
 }
-
 button.ghost {
   background: #0c111b;
 }
-
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* =========================
-   Tabela (resultados e classes)
-   ========================= */
+/* Tabelas */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -199,60 +168,68 @@ table {
   font-size: var(--fs-100);
 }
 
-/* scroll horizontal em telas estreitas */
 #tabela,
 #classesTable,
 #distTable {
   display: block;
+  max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 th,
 td {
-  border-bottom: 0.0625rem solid #273149;
+  border-bottom: 1px solid #273149;
   padding: 0.625rem 0.75rem;
   text-align: left;
   vertical-align: middle;
 }
-
 th {
   color: var(--muted);
   font-weight: 600;
   background: #0f1420;
 }
 
-/* Inputs na tabela de classes (agrupados) */
+/* Inputs nas classes */
 #classesTable input[type="number"] {
   width: 100%;
   padding: 0.5rem 0.625rem;
-  border: 0.0625rem solid #273149;
+  border: 1px solid #273149;
   border-radius: var(--radius-md);
   background: #0c0f17;
   color: var(--text);
   font-size: var(--fs-100);
   outline: none;
+  min-width: 3.75rem;
 }
-
 #classesTable input[type="number"]::placeholder {
   color: #7d8bb1;
 }
 
-/* =========================
-   Área de gráficos
-   ========================= */
+/* Área de gráficos */
 .grid {
   display: grid;
   gap: var(--space-4);
   margin-top: var(--space-5);
 }
 
-.canvas-card {
-  padding: var(--space-4);
-  border: 0.0625rem solid #273149;
-  border-radius: var(--radius-md);
-  background: #0f1420;
+.grid > * {
+  min-width: 0;
 }
 
+.canvas-card {
+  padding: var(--space-4);
+  border: 1px solid #273149;
+  border-radius: var(--radius-md);
+  background: #0f1420;
+  overflow: hidden;
+}
+.canvas-card canvas {
+  display: block;
+  max-width: 100%;
+  width: 100% !important;
+  height: auto !important;
+}
 .canvas-head {
   display: flex;
   align-items: center;
@@ -266,7 +243,7 @@ th {
   padding: 0.125rem 0.5rem;
   border-radius: 999px;
   background: #19233a;
-  border: 0.0625rem solid #273149;
+  border: 1px solid #273149;
   color: var(--muted);
 }
 
@@ -276,9 +253,7 @@ th {
   font-size: var(--fs-100);
 }
 
-/* =========================
-   Mensagens
-   ========================= */
+/* Mensagens */
 .ok {
   color: var(--ok);
 }
@@ -287,20 +262,18 @@ th {
 }
 
 /* =========================
-   RESPONSIVO
+   Responsivo
    ========================= */
 @media (min-width: 880px) {
   .row {
     grid-template-columns: 2fr 1fr;
   }
 }
-
 @media (min-width: 900px) {
   .grid {
     grid-template-columns: 1fr 1fr;
   }
 }
-
 @media (min-width: 1120px) {
   .wrap {
     padding: 0 var(--space-5);

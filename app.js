@@ -672,8 +672,8 @@ $("#gPizzaAgr").addEventListener("click", () => {
     "pizzaAgr",
     $("#pizzaAgrCanvas"),
     cfgPizza(
-      ultimoAgrupado.labelsClasse, // rótulos: intervalos
-      ultimoAgrupado.fi, // valores: frequências
+      ultimoAgrupado.labelsClasse, 
+      ultimoAgrupado.fi,
       "Distribuição por intervalos (pizza)"
     )
   );
