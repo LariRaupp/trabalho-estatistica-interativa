@@ -129,6 +129,7 @@ let charts = {
   disp: null,
   pizza: null,
   histAgr: null,
+  pizzaAgr: null,
   poligono: null,
   ogiva: null,
 };
@@ -363,6 +364,7 @@ document.querySelectorAll("button[data-dl]").forEach((btn) => {
       disp: ["dispCanvas", "dispersao"],
       pizza: ["pizzaCanvas", "pizza"],
       histAgr: ["histAgrCanvas", "histograma-classes"],
+      pizzaAgr: ["pizzaAgrCanvas", "pizza-classes"],
       poligono: ["poligonoCanvas", "poligono-frequencias"],
       ogiva: ["ogivaCanvas", "ogiva"],
     };
@@ -628,7 +630,7 @@ $("#btnLimparAgr").addEventListener("click", () => {
 
   ultimoAgrupado = null;
 
-  for (const key of ["histAgr", "poligono", "ogiva"]) {
+  for (const key of ["histAgr", "pizzaAgr", "poligono", "ogiva"]) {
     if (charts[key]) {
       charts[key].destroy();
       charts[key] = null;
@@ -661,6 +663,18 @@ $("#gHistAgr").addEventListener("click", () => {
       ultimoAgrupado.labelsClasse,
       ultimoAgrupado.fi,
       "Histograma (classes)"
+    )
+  );
+});
+$("#gPizzaAgr").addEventListener("click", () => {
+  if (!ultimoAgrupado) return alert("Calcule os agrupados primeiro.");
+  resetChart(
+    "pizzaAgr",
+    $("#pizzaAgrCanvas"),
+    cfgPizza(
+      ultimoAgrupado.labelsClasse, // rótulos: intervalos
+      ultimoAgrupado.fi, // valores: frequências
+      "Distribuição por intervalos (pizza)"
     )
   );
 });

@@ -250,11 +250,12 @@
             <div>
               <div class="badge">Gráficos (agrupados)</div>
               <p class="muted small" style="margin: 8px 0 12px">
-                Após calcular, você poderá gerar histograma/polígono/ogiva.
+                Gere quantos quiser; depois clique em Baixar PNG.
               </p>
               <div class="btns">
                 <button id="gHistAgr">Histograma (classes)</button>
-                <button id="gPoligono">Polígono de frequências</button>
+                <button id="gPizzaAgr">Pizza (classes)</button>
+                <button id="gPoligono">Polígono</button>
                 <button id="gOgiva">Ogiva (acumulada)</button>
               </div>
             </div>
@@ -270,6 +271,15 @@
                 </button>
               </div>
               <canvas id="histAgrCanvas" height="280"></canvas>
+            </div>
+            <div class="canvas-card">
+              <div class="canvas-head">
+                <b>Pizza (classes)</b>
+                <button data-dl="pizzaAgr" class="ghost small">
+                  Baixar PNG
+                </button>
+              </div>
+              <canvas id="pizzaAgrCanvas" height="280"></canvas>
             </div>
             <div class="canvas-card">
               <div class="canvas-head">
