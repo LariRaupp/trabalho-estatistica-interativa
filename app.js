@@ -134,6 +134,46 @@ let charts = {
   ogiva: null,
 };
 
+// detecta aspect ratio ideal conforme largura do container
+function getAspectRatio(ctx, tipo = "bar") {
+  const w =
+    ctx && ctx.canvas
+      ? ctx.canvas.parentElement.clientWidth
+      : window.innerWidth;
+
+  if (w >= 1400) return tipo === "scatter" ? 2.2 : 2.4;
+  if (w >= 1100) return tipo === "scatter" ? 2.0 : 2.2;
+  if (w >= 900) return 1.6;
+  return 1.1; // padrão para telas pequenas
+}
+
+// limita quantidade de ticks para não poluir eixo X
+function xTicksOpts(labels) {
+  const count = Array.isArray(labels) ? labels.length : 0;
+  const maxTicks = count > 12 ? 12 : count;
+  return {
+    maxRotation: 0,
+    autoSkip: true,
+    maxTicksLimit: Math.max(6, maxTicks),
+    callback: function (val, idx, ticks) {
+      const txt = this.getLabelForValue
+        ? this.getLabelForValue(val)
+        : String(labels[idx] ?? "");
+      return typeof txt === "string" && txt.length > 22
+        ? txt.slice(0, 22) + "…"
+        : txt;
+    },
+  };
+}
+
+// ponto da dispersão menor quando há muitos pontos
+function getPointRadius(n) {
+  if (n >= 500) return 1.5;
+  if (n >= 200) return 2;
+  if (n >= 100) return 3;
+  return 4;
+}
+
 // cria/destrói gráfico corretamente
 function resetChart(key, ctx, cfg) {
   if (charts[key]) {
@@ -143,18 +183,28 @@ function resetChart(key, ctx, cfg) {
   charts[key] = new Chart(ctx, cfg);
 }
 
-// presets de gráfico
-function cfgBarras(labels, data, titulo) {
+// presets de gráfico (com ajustes dinâmicos)
+function cfgBarras(labels, data, titulo, ctx) {
   return {
     type: "bar",
     data: { labels, datasets: [{ label: "Frequência", data }] },
     options: {
       responsive: true,
-      plugins: { title: { display: true, text: titulo } },
-      scales: { y: { beginAtZero: true } },
+      aspectRatio: getAspectRatio(ctx, "bar"),
+      plugins: {
+        title: { display: true, text: titulo },
+        legend: { display: false },
+        tooltip: { intersect: false },
+      },
+      layout: { padding: { right: 6 } },
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } },
+        x: { ticks: xTicksOpts(labels) },
+      },
     },
   };
 }
+
 function cfgPizza(labels, data, titulo) {
   return {
     type: "pie",
@@ -164,16 +214,27 @@ function cfgPizza(labels, data, titulo) {
       plugins: {
         title: { display: true, text: titulo },
         legend: { position: "right" },
+        tooltip: { intersect: false },
       },
     },
   };
 }
-function cfgDisp(pontos, titulo) {
+
+function cfgDisp(pontos, titulo, ctx) {
   return {
     type: "scatter",
-    data: { datasets: [{ label: "Dados", data: pontos, pointRadius: 4 }] },
+    data: {
+      datasets: [
+        {
+          label: "Dados",
+          data: pontos,
+          pointRadius: getPointRadius(pontos.length),
+        },
+      ],
+    },
     options: {
       responsive: true,
+      aspectRatio: getAspectRatio(ctx, "scatter"),
       plugins: { title: { display: true, text: titulo } },
       scales: {
         x: { title: { display: true, text: "Índice (1..n)" } },
@@ -182,14 +243,25 @@ function cfgDisp(pontos, titulo) {
     },
   };
 }
-function cfgLinha(labels, data, titulo) {
+
+function cfgLinha(labels, data, titulo, ctx) {
   return {
     type: "line",
-    data: { labels, datasets: [{ label: "Frequência", data, tension: 0.1 }] },
+    data: {
+      labels,
+      datasets: [{ label: "Frequência", data, tension: 0.1, pointRadius: 2 }],
+    },
     options: {
       responsive: true,
-      plugins: { title: { display: true, text: titulo } },
-      scales: { y: { beginAtZero: true } },
+      aspectRatio: getAspectRatio(ctx, "line"),
+      plugins: {
+        title: { display: true, text: titulo },
+        legend: { display: false },
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } },
+        x: { ticks: xTicksOpts(labels) },
+      },
     },
   };
 }
@@ -233,7 +305,7 @@ function calcular() {
   const min = Math.min(...dados);
   const max = Math.max(...dados);
 
-  // mostra dados ordenados (caixa dos brutos)
+  // mostra dados ordenados (brutos)
   const ordenados = [...dados].sort((a, b) => a - b);
   $("#ordenado").value = ordenados.join(", ");
   $("#ordenadoBox").style.display = "";
@@ -285,7 +357,7 @@ if (tabs) {
   tabs.addEventListener("click", (ev) => {
     const btn = ev.target.closest("button[data-tab]");
     if (!btn) return;
-    ativarAba(btn.dataset.tab); // "brutos" ou "agrupados"
+    ativarAba(btn.dataset.tab);
   });
 }
 
@@ -320,7 +392,7 @@ $("#gHist").addEventListener("click", () => {
   resetChart(
     "hist",
     $("#histCanvas"),
-    cfgBarras(h.labels, h.values, "Histograma (Sturges)")
+    cfgBarras(h.labels, h.values, "Histograma (Sturges)", $("#histCanvas"))
   );
 });
 $("#gBarras").addEventListener("click", () => {
@@ -330,7 +402,7 @@ $("#gBarras").addEventListener("click", () => {
   resetChart(
     "barras",
     $("#barrasCanvas"),
-    cfgBarras(labels, values, "Frequência dos valores")
+    cfgBarras(labels, values, "Frequência dos valores", $("#barrasCanvas"))
   );
 });
 $("#gDisp").addEventListener("click", () => {
@@ -340,13 +412,22 @@ $("#gDisp").addEventListener("click", () => {
   resetChart(
     "disp",
     $("#dispCanvas"),
-    cfgDisp(pontos, "Dispersão (índice vs valor)")
+    cfgDisp(pontos, "Dispersão (índice vs valor)", $("#dispCanvas"))
   );
 });
 $("#gPizza").addEventListener("click", () => {
   const res = calcular();
   if (!res) return;
+
   const { labels, values } = frequenciaSimples(res.dados);
+
+  if (labels.length > 5) {
+    const ok = confirm(
+      "Atenção: gráficos de pizza não são ideais quando há mais de 5 elementos. Deseja gerar o gráfico mesmo assim?"
+    );
+    if (!ok) return;
+  }
+
   resetChart(
     "pizza",
     $("#pizzaCanvas"),
@@ -624,7 +705,7 @@ $("#btnLimparAgr").addEventListener("click", () => {
 
   const resumo = $("#agrResumo");
   if (resumo) {
-    resumo.replaceChildren(); // limpa mais direto
+    resumo.replaceChildren();
     resumo.style.display = "none";
   }
 
@@ -643,7 +724,6 @@ const btnExemploAgr = $("#btnExemploAgr");
 if (btnExemploAgr) {
   btnExemploAgr.addEventListener("click", () => {
     $("#classesBody").innerHTML = "";
-    // exemplo simples: três classes
     addClasseRow(1, 2, 10);
     addClasseRow(3, 4, 20);
     addClasseRow(5, 6, 30);
@@ -662,19 +742,29 @@ $("#gHistAgr").addEventListener("click", () => {
     cfgBarras(
       ultimoAgrupado.labelsClasse,
       ultimoAgrupado.fi,
-      "Histograma (classes)"
+      "Histograma (classes)",
+      $("#histAgrCanvas")
     )
   );
 });
 $("#gPizzaAgr").addEventListener("click", () => {
   if (!ultimoAgrupado) return alert("Calcule os agrupados primeiro.");
+
+  if (ultimoAgrupado.labelsClasse.length > 5) {
+    const ok = confirm(
+      "Atenção: gráficos de pizza não são ideais quando há mais de 5 classes. Deseja gerar o gráfico mesmo assim?"
+    );
+
+    if (!ok) return;
+  }
+
   resetChart(
     "pizzaAgr",
     $("#pizzaAgrCanvas"),
     cfgPizza(
-      ultimoAgrupado.labelsClasse, 
+      ultimoAgrupado.labelsClasse,
       ultimoAgrupado.fi,
-      "Distribuição por intervalos (pizza)"
+      "Distribuição (pizza por classes)"
     )
   );
 });
@@ -686,7 +776,8 @@ $("#gPoligono").addEventListener("click", () => {
     cfgLinha(
       ultimoAgrupado.labelsXi,
       ultimoAgrupado.fi,
-      "Polígono de frequências (xi vs fi)"
+      "Polígono de frequências (xi vs fi)",
+      $("#poligonoCanvas")
     )
   );
 });
@@ -698,7 +789,8 @@ $("#gOgiva").addEventListener("click", () => {
     cfgLinha(
       ultimoAgrupado.labelsClasse,
       ultimoAgrupado.Fi,
-      "Ogiva (acumulada)"
+      "Ogiva (acumulada)",
+      $("#ogivaCanvas")
     )
   );
 });

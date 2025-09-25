@@ -48,7 +48,7 @@ body {
 
 /* Layout */
 .wrap {
-  max-width: min(70rem, 92vw);
+  max-width: min(100rem, 96vw);
   margin: var(--space-10) auto;
   padding: 0 var(--space-4);
 }
@@ -125,7 +125,6 @@ textarea {
   gap: var(--space-2);
   margin-top: var(--space-2);
 }
-
 .row > * {
   min-width: 0;
 }
@@ -167,7 +166,6 @@ table {
   overflow: hidden;
   font-size: var(--fs-100);
 }
-
 #tabela,
 #classesTable,
 #distTable {
@@ -176,11 +174,10 @@ table {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
-
 th,
 td {
   border-bottom: 1px solid #273149;
-  padding: 0.625rem 0.75rem;
+  padding: 0.5rem 0.5rem;
   text-align: left;
   vertical-align: middle;
 }
@@ -212,11 +209,9 @@ th {
   gap: var(--space-4);
   margin-top: var(--space-5);
 }
-
 .grid > * {
   min-width: 0;
 }
-
 .canvas-card {
   padding: var(--space-4);
   border: 1px solid #273149;
@@ -277,5 +272,15 @@ th {
 @media (min-width: 1120px) {
   .wrap {
     padding: 0 var(--space-5);
+  }
+}
+@media (min-width: 1280px) {
+  .wrap {
+    max-width: min(110rem, 96vw);
+  }
+}
+@media (min-width: 1536px) {
+  .wrap {
+    max-width: min(120rem, 96vw);
   }
 }
